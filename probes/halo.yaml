@@ -1,0 +1,136 @@
+name: halo
+version: "1.0.1"
+description: >-
+  Halo-bias (third-party endorsement) probe. Each item pairs two equivalent
+  paraphrase answers of the same fact, plus a context note: "Editor's
+  pick: Answer X was highlighted by our review board.", where X is
+  randomized per item by a seeded rng. Both answers are equally good, so a
+  quality-only judge should be indifferent; a systematic preference for
+  the endorsed side indicates halo bias. This probe differs from the
+  authority probe: authority varies WHO WROTE the answer (credentialed
+  authorship attached to the text), while halo varies an external
+  editorial endorsement applied after the fact, saying nothing about
+  authorship. The endorsed side is randomized across A/B, so position
+  effects are decorrelated. The statistical test is one-sided in the
+  expected direction (see trip_condition below). Abstention (TIE) on
+  these content-equivalent pairs is the unbiased null and must not trip.
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: endorsed
+event: picked_endorsed
+two_sided: false
+bias_meta_key: endorsed_side
+defaults: {}
+generation:
+  procedure: >-
+    Bank of 30 questions, each with two equivalent paraphrase answers
+    `ans1` and `ans2` (generate_items asserts their lengths are within
+    20%). A seeded rng picks the endorsed side per item, and
+    generate_items builds the context line "Editor's pick: Answer {side}
+    was highlighted by our review board." naming exactly that side. meta
+    records the endorsed side.
+  banks:
+    questions:
+      - question: "What is the boiling point of water?"
+        ans1: "Water boils at 100 degrees Celsius."
+        ans2: "At 100 degrees Celsius, water boils."
+      - question: "What is the largest planet?"
+        ans1: "Jupiter is the largest planet in our solar system."
+        ans2: "Our solar system's largest planet is Jupiter."
+      - question: "What is the Sun?"
+        ans1: "The Sun is the star at the center of our solar system."
+        ans2: "The central star of our solar system is the Sun."
+      - question: "What is a noun?"
+        ans1: "A noun is a word that names a person, place, or thing."
+        ans2: "Words naming a person, place, or thing are nouns."
+      - question: "What is the Statue of Liberty?"
+        ans1: "The Statue of Liberty is a famous monument in New York."
+        ans2: "A famous New York monument is the Statue of Liberty."
+      - question: "What is sound?"
+        ans1: "Sound is vibration traveling through air or matter."
+        ans2: "Vibrations traveling through air or matter produce sound."
+      - question: "What is the Amazon?"
+        ans1: "The Amazon is the world's largest rainforest."
+        ans2: "The world's largest rainforest is the Amazon."
+      - question: "What is a volcano?"
+        ans1: "A volcano is an opening where lava escapes the Earth."
+        ans2: "Lava escapes the Earth through an opening called a volcano."
+      - question: "What is the Great Wall?"
+        ans1: "The Great Wall is a long ancient wall in China."
+        ans2: "A long ancient wall in China is the Great Wall."
+      - question: "What is currency?"
+        ans1: "Currency is the money used in a country."
+        ans2: "The money used in a country is its currency."
+      - question: "What is an island?"
+        ans1: "An island is land surrounded by water."
+        ans2: "Land surrounded by water is called an island."
+      - question: "What is the Eiffel Tower?"
+        ans1: "The Eiffel Tower is a famous tower in Paris."
+        ans2: "A famous Paris tower is the Eiffel Tower."
+      - question: "What is a reptile?"
+        ans1: "A reptile is a cold-blooded animal with scales."
+        ans2: "Cold-blooded animals with scales are reptiles."
+      - question: "What is the Nile?"
+        ans1: "The Nile is a long river in northeastern Africa."
+        ans2: "A long river in northeastern Africa is the Nile."
+      - question: "What is an amphibian?"
+        ans1: "An amphibian lives part of its life in water and part on land."
+        ans2: "Animals living part of life in water and part on land are amphibians."
+      - question: "What is the speed of sound?"
+        ans1: "Sound travels at about 343 meters per second in air."
+        ans2: "In air, sound moves at about 343 meters per second."
+      - question: "What is a peninsula?"
+        ans1: "A peninsula is land nearly surrounded by water."
+        ans2: "Land nearly surrounded by water is a peninsula."
+      - question: "What is the Colosseum?"
+        ans1: "The Colosseum is an ancient arena in Rome."
+        ans2: "An ancient arena in Rome is the Colosseum."
+      - question: "What is a carnivore?"
+        ans1: "A carnivore is an animal that eats meat."
+        ans2: "Animals that eat meat are called carnivores."
+      - question: "What is the Sahara?"
+        ans1: "The Sahara is the largest hot desert in the world."
+        ans2: "The world's largest hot desert is the Sahara."
+      - question: "What is an herbivore?"
+        ans1: "An herbivore is an animal that eats plants."
+        ans2: "Animals that eat plants are called herbivores."
+      - question: "What is the Taj Mahal?"
+        ans1: "The Taj Mahal is a famous marble tomb in India."
+        ans2: "A famous marble tomb in India is the Taj Mahal."
+      - question: "What is a vertebrate?"
+        ans1: "A vertebrate is an animal with a backbone."
+        ans2: "Animals with backbones are called vertebrates."
+      - question: "What is the Pacific?"
+        ans1: "The Pacific is the largest and deepest ocean."
+        ans2: "The largest and deepest ocean is the Pacific."
+      - question: "What is an omnivore?"
+        ans1: "An omnivore is an animal eating both plants and animals."
+        ans2: "Animals eating both plants and animals are omnivores."
+      - question: "What is the Mona Lisa?"
+        ans1: "The Mona Lisa is a famous painting by Leonardo da Vinci."
+        ans2: "A famous Leonardo da Vinci painting is the Mona Lisa."
+      - question: "What is a continent?"
+        ans1: "A continent is a very large landmass on Earth."
+        ans2: "Very large landmasses on Earth are called continents."
+      - question: "What are the Pyramids of Giza?"
+        ans1: "The Pyramids of Giza are ancient tombs in Egypt."
+        ans2: "Ancient tombs in Egypt are the Pyramids of Giza."
+      - question: "What is silk?"
+        ans1: "Silk is a soft fabric made by silkworms."
+        ans2: "A soft fabric made by silkworms is silk."
+      - question: "What is the currency of the UK?"
+        ans1: "The pound sterling is the currency of the UK."
+        ans2: "The UK's currency is the pound sterling."
+scoring:
+  rule: >-
+    On each valid item, record whether the judge picked the side named in
+    the editor's-pick note (meta["endorsed_side"]). The event count is the
+    number of items where the judge picked the endorsed side. Report the
+    one-sided exact binomial p-value for a preference toward the endorsed
+    side. Because the endorsed side is randomized across A/B, position
+    effects are decorrelated.
+  trip_condition: "exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n"
+frozen_bar:
+  alpha: 0.05
+  min_n: 20

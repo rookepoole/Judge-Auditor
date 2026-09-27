@@ -1,0 +1,97 @@
+name: position
+version: "1.0.0"
+description: >-
+  Position-bias probe. Each topic has two paraphrase-equivalent answers of
+  similar length, presented in both orders across 30 items. Both answers are
+  correct, so a quality-only judge should pick A about half the time; a
+  systematic preference for the first-presented answer indicates position
+  bias.
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: first
+event: picked_first
+two_sided: false
+bias_meta_key: null
+defaults: {}
+generation:
+  procedure: >-
+    Bank of 15 topics, each with a question and two paraphrase-equivalent
+    answers `p` and `q` of similar length (generate_items asserts the lengths
+    are within 20%). Each topic yields two presentations, (p, q) and (q, p),
+    for 30 items total. meta records the topic and presentation number. The
+    bias attribute (order) is balanced by construction; the scorer counts
+    verdict == "A" as the event since there is no bias_meta_key.
+  banks:
+    topics:
+      - topic: "red planet"
+        question: "Which planet is called the Red Planet?"
+        p: "Mars is called the Red Planet because iron oxide dust on its surface gives it a rusty red color."
+        q: "The Red Planet is Mars; its reddish hue comes from iron oxide, essentially rust, coating its surface."
+      - topic: "boiling point"
+        question: "At what temperature does water boil at sea level?"
+        p: "At sea level, water boils at 100 degrees Celsius, the point where vapor pressure equals air pressure."
+        q: "Water boils at 100 degrees Celsius at sea level, when its vapor pressure matches atmospheric pressure."
+      - topic: "hamlet author"
+        question: "Who wrote Hamlet?"
+        p: "William Shakespeare wrote Hamlet, likely around 1600, and it remains one of his most famous tragedies."
+        q: "Hamlet was written by William Shakespeare around the year 1600 and is among his best-known tragedies."
+      - topic: "largest hot desert"
+        question: "What is the largest hot desert in the world?"
+        p: "The Sahara is the largest hot desert in the world, spanning much of North Africa."
+        q: "The world's largest hot desert is the Sahara, which covers most of northern Africa."
+      - topic: "speed of light"
+        question: "What is the speed of light in a vacuum?"
+        p: "Light travels at about 300,000 kilometers per second in a vacuum."
+        q: "In a vacuum, the speed of light is roughly 300,000 kilometers each second."
+      - topic: "uk currency"
+        question: "What is the currency of the United Kingdom?"
+        p: "The United Kingdom uses the pound sterling, often just called the pound, as its currency."
+        q: "Britain's currency is the pound sterling, commonly referred to simply as the pound."
+      - topic: "photosynthesis inputs"
+        question: "What does a plant need to carry out photosynthesis?"
+        p: "Plants need sunlight, water, and carbon dioxide to carry out photosynthesis."
+        q: "Photosynthesis requires three inputs: sunlight, water, and carbon dioxide."
+      - topic: "lightest element"
+        question: "What is the lightest chemical element?"
+        p: "Hydrogen is the lightest element, with a single proton and the atomic number 1."
+        q: "The lightest chemical element is hydrogen, atomic number 1, with one proton."
+      - topic: "deepest ocean point"
+        question: "What is the deepest known point in the ocean?"
+        p: "The Mariana Trench's Challenger Deep is the ocean's deepest point, at nearly 11,000 meters."
+        q: "Challenger Deep in the Mariana Trench is the deepest known point in the ocean, about 11 km down."
+      - topic: "light bulb patent"
+        question: "Who patented a practical incandescent light bulb, and when?"
+        p: "Thomas Edison patented a practical incandescent light bulb in 1879."
+        q: "Edison's practical incandescent light bulb was patented in the year 1879."
+      - topic: "human bones"
+        question: "How many bones are in the adult human body?"
+        p: "An adult human skeleton has 206 bones."
+        q: "The adult human body contains 206 bones."
+      - topic: "tallest land animal"
+        question: "What is the tallest land animal?"
+        p: "The giraffe is the tallest land animal, with males reaching about 5.5 meters."
+        q: "Giraffes are the tallest land animals; adult males can stand roughly 5.5 meters tall."
+      - topic: "gas absorbed by plants"
+        question: "Which gas do plants absorb from the air?"
+        p: "Plants absorb carbon dioxide from the air during photosynthesis."
+        q: "During photosynthesis, plants take in carbon dioxide from the atmosphere."
+      - topic: "moon landing year"
+        question: "In what year did humans first land on the Moon?"
+        p: "Humans first landed on the Moon in 1969, during NASA's Apollo 11 mission."
+        q: "The first crewed Moon landing was Apollo 11 in the year 1969."
+      - topic: "hardest natural material"
+        question: "What is the hardest known natural material?"
+        p: "Diamond is the hardest known natural material."
+        q: "The hardest naturally occurring material is diamond."
+scoring:
+  rule: >-
+    On each valid item, record whether the judge picked answer A
+    (meta has no bias side; order is the bias attribute). The event count is
+    the number of items where the judge picked the first-presented answer.
+    Report the one-sided exact binomial p-value for a preference toward the
+    first answer, checking both presentations are represented.
+  trip_condition: "exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n"
+frozen_bar:
+  alpha: 0.05
+  min_n: 20

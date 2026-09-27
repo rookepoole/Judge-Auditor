@@ -1,0 +1,312 @@
+name: verbosity
+version: "1.0.0"
+description: >-
+  Verbosity-bias probe. Each item pairs a short correct answer with a longer
+  answer carrying the same core content plus elaboration. Both answers are
+  correct, so a quality-only judge should be indifferent; a systematic
+  preference for the longer answer indicates verbosity bias.
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: long
+event: picked_longer
+two_sided: false
+bias_meta_key: longer
+defaults: {}
+generation:
+  procedure: >-
+    Bank of 30 general-knowledge questions, each with a `short` answer (1-2
+    sentences, correct) and a `long` answer (same core content plus 2-3
+    elaboration sentences). generate_items asserts len(long) > len(short) for
+    every item, then a seeded rng assigns the long answer to side A or B.
+    meta records the side holding the longer answer.
+  banks:
+    questions:
+      - question: "What is the capital of France?"
+        short: "Paris is the capital of France."
+        long: >-
+          Paris is the capital of France. It sits on the River Seine in the
+          north-central part of the country and holds roughly two million
+          residents within the city limits. Famous landmarks include the Eiffel
+          Tower, the Louvre Museum, and Notre-Dame Cathedral.
+      - question: "Why does the sky look blue?"
+        short: >-
+          The sky looks blue because air molecules scatter short-wavelength blue
+          sunlight more than other colors, a process called Rayleigh scattering.
+        long: >-
+          The sky looks blue because air molecules scatter short-wavelength blue
+          sunlight more than other colors, a process called Rayleigh scattering.
+          When sunlight enters the atmosphere, tiny nitrogen and oxygen
+          molecules deflect the shorter blue wavelengths in all directions,
+          while longer red and orange wavelengths pass through more directly.
+          That is also why sunsets look red: the light travels through more air
+          and the blue has been scattered away.
+      - question: "What is photosynthesis?"
+        short: >-
+          Photosynthesis is the process by which green plants convert sunlight,
+          water, and carbon dioxide into glucose and oxygen.
+        long: >-
+          Photosynthesis is the process by which green plants convert sunlight,
+          water, and carbon dioxide into glucose and oxygen. It takes place in
+          chloroplasts, using the green pigment chlorophyll to capture light
+          energy. Almost every food chain on Earth ultimately depends on the
+          energy captured this way, and the oxygen released sustains aerobic
+          life.
+      - question: "At what temperature does water boil at sea level?"
+        short: "Water boils at 100 degrees Celsius (212 degrees Fahrenheit) at sea level."
+        long: >-
+          Water boils at 100 degrees Celsius (212 degrees Fahrenheit) at sea
+          level. Boiling happens when water's vapor pressure equals the
+          surrounding atmospheric pressure, which is why water boils at lower
+          temperatures on mountaintops where the air is thinner. Cooks at high
+          altitude must adjust recipes because of this effect.
+      - question: "Who wrote Romeo and Juliet?"
+        short: "William Shakespeare wrote Romeo and Juliet."
+        long: >-
+          William Shakespeare wrote Romeo and Juliet. The tragedy of the
+          star-crossed lovers was likely written around 1594 to 1596, early in
+          his career as a playwright. It remains one of the most performed and
+          adapted plays in the world, inspiring countless films, ballets, and
+          musicals including West Side Story.
+      - question: "What is the speed of light in a vacuum?"
+        short: "The speed of light in a vacuum is about 299,792 kilometers per second."
+        long: >-
+          The speed of light in a vacuum is about 299,792 kilometers per
+          second. The exact defined value is 299,792,458 meters per second, and
+          nothing carrying information can travel faster. At that speed, light
+          from the Sun takes roughly eight minutes to reach Earth.
+      - question: "What causes the seasons?"
+        short: >-
+          The seasons are caused by Earth's axial tilt of about 23.5 degrees as
+          it orbits the Sun.
+        long: >-
+          The seasons are caused by Earth's axial tilt of about 23.5 degrees as
+          it orbits the Sun. The hemisphere tilted toward the Sun receives more
+          direct sunlight and experiences summer, while the other hemisphere
+          has winter. Distance from the Sun plays almost no role; Earth is
+          actually closest to the Sun in January.
+      - question: "What causes ocean tides?"
+        short: >-
+          Tides are caused mainly by the gravitational pull of the Moon, with a
+          smaller contribution from the Sun.
+        long: >-
+          Tides are caused mainly by the gravitational pull of the Moon, with a
+          smaller contribution from the Sun. The Moon's gravity creates bulges
+          of water on both the near and far sides of Earth, producing roughly
+          two high tides and two low tides each day. When the Sun and Moon
+          align, their pulls combine to make especially large spring tides.
+      - question: "What is the chemical symbol for gold?"
+        short: "The chemical symbol for gold is Au, from the Latin word aurum."
+        long: >-
+          The chemical symbol for gold is Au, from the Latin word aurum. Gold
+          has atomic number 79 and is prized for being an excellent electrical
+          conductor that never corrodes. Beyond jewelry, it is widely used in
+          electronics, dentistry, and even spacecraft components.
+      - question: "How many planets are in the solar system?"
+        short: "There are eight planets in the solar system."
+        long: >-
+          There are eight planets in the solar system. In order from the Sun
+          they are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and
+          Neptune. Pluto was reclassified as a dwarf planet in 2006, which is
+          why the count dropped from the nine many people learned in school.
+      - question: "What is DNA?"
+        short: >-
+          DNA is the molecule that carries the genetic instructions for building
+          and running a living organism.
+        long: >-
+          DNA is the molecule that carries the genetic instructions for
+          building and running a living organism. It has a double-helix shape
+          made of four chemical bases, adenine, thymine, cytosine, and
+          guanine, whose sequence spells out genes. DNA is organized into
+          chromosomes inside the nucleus of each cell.
+      - question: "Who painted the Mona Lisa?"
+        short: "Leonardo da Vinci painted the Mona Lisa."
+        long: >-
+          Leonardo da Vinci painted the Mona Lisa. He worked on it roughly
+          between 1503 and 1506, using his sfumato technique of soft,
+          smoky transitions between tones. Today it hangs in the Louvre in
+          Paris, where its enigmatic smile draws millions of visitors each
+          year.
+      - question: "What is the largest ocean on Earth?"
+        short: "The Pacific Ocean is the largest ocean on Earth."
+        long: >-
+          The Pacific Ocean is the largest ocean on Earth. It covers about
+          one-third of the planet's surface, an area larger than all the land
+          combined. It also contains the Mariana Trench, the deepest known
+          point in any ocean at nearly 11,000 meters.
+      - question: "Why does ice float on water?"
+        short: >-
+          Ice floats because it is less dense than liquid water; water expands
+          as it freezes.
+        long: >-
+          Ice floats because it is less dense than liquid water; water expands
+          as it freezes. When water crystallizes, hydrogen bonds lock the
+          molecules into an open lattice that takes up more space than the
+          liquid. This is unusual, since most substances are denser as solids,
+          and it insulates lakes in winter so life survives underneath the ice.
+      - question: "What is gravity?"
+        short: >-
+          Gravity is the attractive force between masses; it is what gives
+          objects weight and holds planets in orbit.
+        long: >-
+          Gravity is the attractive force between masses; it is what gives
+          objects weight and holds planets in orbit. Newton described it as a
+          universal attraction, while Einstein reframed it as the curvature of
+          spacetime caused by mass and energy. Though the weakest of the
+          fundamental forces, it dominates at large scales because it is always
+          attractive and never cancels out.
+      - question: "Who was the first person to walk on the Moon?"
+        short: "Neil Armstrong was the first person to walk on the Moon, on July 20, 1969."
+        long: >-
+          Neil Armstrong was the first person to walk on the Moon, on July 20,
+          1969. He commanded NASA's Apollo 11 mission, and Buzz Aldrin joined
+          him on the surface while Michael Collins orbited above. Stepping onto
+          the lunar soil, Armstrong spoke the famous words: "That's one small
+          step for man, one giant leap for mankind."
+      - question: "What is an atom?"
+        short: >-
+          An atom is the smallest unit of ordinary matter, made of protons,
+          neutrons, and electrons.
+        long: >-
+          An atom is the smallest unit of ordinary matter, made of protons,
+          neutrons, and electrons. Protons and neutrons cluster in a dense
+          nucleus, while electrons occupy shells around it. There are just over
+          a hundred known types of atoms, the chemical elements, and despite
+          their solidity, atoms are mostly empty space.
+      - question: "Why is the ocean salty?"
+        short: >-
+          The ocean is salty because rivers carry dissolved minerals from rocks
+          into the sea, where water evaporates and leaves the salt behind.
+        long: >-
+          The ocean is salty because rivers carry dissolved minerals from rocks
+          into the sea, where water evaporates and leaves the salt behind. Over
+          billions of years this one-way process built up to about 3.5 percent
+          salinity, mostly sodium chloride. Undersea volcanic vents add further
+          minerals to the mix.
+      - question: "What causes earthquakes?"
+        short: >-
+          Earthquakes are caused by the sudden release of energy when tectonic
+          plates slip past each other along faults.
+        long: >-
+          Earthquakes are caused by the sudden release of energy when tectonic
+          plates slip past each other along faults. Stress builds as the plates
+          grind and lock, then releases in seconds as seismic waves that shake
+          the ground. The size of a quake is reported on magnitude scales,
+          where each whole-number step means roughly 32 times more energy.
+      - question: "What is the currency of Japan?"
+        short: "The currency of Japan is the yen."
+        long: >-
+          The currency of Japan is the yen. Denoted by the symbol for yen, it
+          is one of the most traded currencies in the world and is issued by
+          the Bank of Japan. Coins and banknotes come in denominations from 1
+          yen up to 10,000 yen.
+      - question: "What is the greenhouse effect?"
+        short: >-
+          The greenhouse effect is the warming of Earth's surface by gases in
+          the atmosphere that trap outgoing heat.
+        long: >-
+          The greenhouse effect is the warming of Earth's surface by gases in
+          the atmosphere that trap outgoing heat. Carbon dioxide, methane, and
+          water vapor absorb infrared radiation rising from the surface and
+          re-radiate some of it downward. Without this natural effect Earth
+          would be about 33 degrees Celsius colder, though human activity has
+          amplified it well beyond its natural level.
+      - question: "Who invented the telephone?"
+        short: "Alexander Graham Bell is credited with inventing the telephone, patenting it in 1876."
+        long: >-
+          Alexander Graham Bell is credited with inventing the telephone,
+          patenting it in 1876. His first successful call carried the words
+          "Mr. Watson, come here, I want to see you" to his assistant. Rival
+          inventor Elisha Gray filed a similar patent on the very same day,
+          sparking one of history's most famous patent disputes.
+      - question: "What is a black hole?"
+        short: >-
+          A black hole is a region of space where gravity is so strong that
+          nothing, not even light, can escape.
+        long: >-
+          A black hole is a region of space where gravity is so strong that
+          nothing, not even light, can escape. Most form when massive stars
+          collapse at the end of their lives, crushing their mass inside a
+          boundary called the event horizon. Astronomers detect them through
+          their gravitational pull on nearby stars and, recently, through
+          gravitational waves from colliding black holes.
+      - question: "Why do leaves change color in autumn?"
+        short: >-
+          Leaves change color in autumn because chlorophyll breaks down,
+          revealing yellow and orange pigments that were there all along.
+        long: >-
+          Leaves change color in autumn because chlorophyll breaks down,
+          revealing yellow and orange pigments that were there all along. As
+          days shorten, trees seal off their leaves and stop making green
+          pigment. Brilliant reds come from anthocyanins that some trees
+          manufacture in fall, possibly as sunscreen for the leaf's final
+          weeks.
+      - question: "What does the Pythagorean theorem state?"
+        short: >-
+          The Pythagorean theorem states that in a right triangle, a squared
+          plus b squared equals c squared, where c is the hypotenuse.
+        long: >-
+          The Pythagorean theorem states that in a right triangle, a squared
+          plus b squared equals c squared, where c is the hypotenuse. It is
+          attributed to the Greek mathematician Pythagoras, though earlier
+          cultures knew the relationship. Builders, navigators, and engineers
+          still use it constantly, and its converse provides a simple test for
+          whether a triangle contains a right angle.
+      - question: "How does a battery store and release energy?"
+        short: >-
+          A battery stores chemical energy and converts it into electrical
+          energy through reactions at its two electrodes.
+        long: >-
+          A battery stores chemical energy and converts it into electrical
+          energy through reactions at its two electrodes. Chemical reactions at
+          the anode release electrons, which flow through an external circuit
+          to the cathode, powering devices along the way. In rechargeable
+          batteries, forcing current backward reverses the reactions and
+          restores the stored energy.
+      - question: "What is the tallest mountain above sea level?"
+        short: "Mount Everest is the tallest mountain above sea level, at about 8,849 meters."
+        long: >-
+          Mount Everest is the tallest mountain above sea level, at about 8,849
+          meters. It stands in the Himalayas on the border between Nepal and
+          Tibet. Edmund Hillary and Tenzing Norgay made the first confirmed
+          summit in 1953, and the mountain is still rising a few millimeters
+          each year as tectonic plates collide.
+      - question: "What causes lightning?"
+        short: >-
+          Lightning is caused by the buildup and sudden discharge of electrical
+          charge inside storm clouds.
+        long: >-
+          Lightning is caused by the buildup and sudden discharge of electrical
+          charge inside storm clouds. Collisions between ice crystals and hail
+          separate positive and negative charges within the cloud until the
+          voltage overcomes the air's resistance. The thunder we hear is the
+          shock wave from air explosively heated by the bolt.
+      - question: "What is the function of red blood cells?"
+        short: "Red blood cells carry oxygen from the lungs to the body's tissues using hemoglobin."
+        long: >-
+          Red blood cells carry oxygen from the lungs to the body's tissues
+          using hemoglobin. They have no nucleus, which leaves more room for
+          the hemoglobin that binds oxygen and gives blood its red color. Each
+          cell lives about 120 days and is replaced by fresh cells made in the
+          bone marrow.
+      - question: "Why do we yawn?"
+        short: >-
+          Yawning is a deep inhalation thought to help cool the brain and
+          increase alertness, and it is socially contagious.
+        long: >-
+          Yawning is a deep inhalation thought to help cool the brain and
+          increase alertness, and it is socially contagious. The best-supported
+          theory is brain cooling: the deep breath and jaw stretch move warm
+          blood away from the skull. Contagious yawning, triggered by seeing or
+          even reading about yawns, has been linked in studies to empathy and
+          social bonding.
+scoring:
+  rule: >-
+    On each valid item, record whether the judge picked the side holding the
+    longer answer (meta["longer"]). The event count is the number of items
+    where the judge picked the longer side. Report the one-sided exact
+    binomial p-value for a preference toward the longer answer.
+  trip_condition: "exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n"
+frozen_bar:
+  alpha: 0.05
+  min_n: 20

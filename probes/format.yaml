@@ -1,0 +1,235 @@
+name: format
+version: "1.0.1"
+description: >-
+  Format-bias probe. Each item pairs a bullet-list answer with a paragraph
+  answer carrying the same content. Both answers are equally correct, so a
+  quality-only judge should be indifferent; a systematic preference for the
+  bullet format indicates format bias. The bullet side is randomized per
+  item, so this probe is two-sided with respect to position.
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: bullets
+event: picked_bullets
+two_sided: false
+bias_meta_key: bullets_side
+defaults: {}
+generation:
+  procedure: >-
+    Bank of 30 questions, each with a `bullets` answer (3-5 lines, each
+    starting with "- ", same content) and a `paragraph` answer (prose version
+    of the same content). generate_items asserts the two answers' lengths are
+    within 30% and that every bullet line starts with "- ", then a seeded rng
+    assigns the bullet answer to side A or B. meta records the bullet side.
+  banks:
+    questions:
+      - question: "What are the three states of matter?"
+        bullets: |-
+          - Solid: has a fixed shape and volume.
+          - Liquid: has a fixed volume but takes the shape of its container.
+          - Gas: expands to fill both the shape and volume of its container.
+        paragraph: "Matter commonly exists in three states. A solid keeps a fixed shape and volume, a liquid keeps its volume but takes its container's shape, and a gas expands to fill whatever holds it."
+      - question: "What are the primary colors of light?"
+        bullets: |-
+          - Red: one of the three additive primaries.
+          - Green: the second additive primary.
+          - Blue: the third additive primary; together they make white.
+        paragraph: "The primary colors of light are red, green, and blue. These additive primaries combine in different amounts to produce all other colors, and together at full intensity they make white."
+      - question: "What do plants need to grow?"
+        bullets: |-
+          - Sunlight: provides energy for photosynthesis.
+          - Water: absorbed by the roots from soil.
+          - Carbon dioxide: taken in from the air through leaves.
+          - Nutrients: minerals from the soil support healthy growth.
+        paragraph: "Plants need sunlight, water, carbon dioxide, and soil nutrients to grow. Light powers photosynthesis, roots absorb water, leaves take in carbon dioxide from the air, and minerals from the soil support healthy development."
+      - question: "What are the layers of the Earth?"
+        bullets: |-
+          - Crust: the thin, solid outer layer we live on.
+          - Mantle: thick layer of hot, slowly flowing rock.
+          - Outer core: liquid iron and nickel.
+          - Inner core: solid iron-nickel sphere under immense pressure.
+        paragraph: "Earth has four main layers. The thin solid crust is where we live, below it lies the thick rocky mantle, then the liquid iron-nickel outer core, and at the center the solid inner core under immense pressure."
+      - question: "What are the three branches of the US government?"
+        bullets: |-
+          - Legislative: Congress makes the laws.
+          - Executive: the president enforces the laws.
+          - Judicial: the courts interpret the laws.
+        paragraph: "The US government has three branches: Congress makes the laws, the president enforces them, and the courts interpret them."
+      - question: "What are the main food groups?"
+        bullets: |-
+          - Fruits and vegetables: provide vitamins and fiber.
+          - Grains: supply energy-rich carbohydrates.
+          - Protein foods: build and repair body tissues.
+          - Dairy: provides calcium for bones.
+        paragraph: "The main food groups are fruits and vegetables, grains, protein foods, and dairy. Produce provides vitamins and fiber, grains supply carbohydrates for energy, proteins build tissue, and dairy provides calcium for bones."
+      - question: "What are the stages of the water cycle?"
+        bullets: |-
+          - Evaporation: water rises as vapor from oceans and lakes.
+          - Condensation: vapor cools and forms clouds.
+          - Precipitation: water falls as rain or snow.
+          - Collection: water gathers back in bodies of water.
+        paragraph: "The water cycle has four stages. Water evaporates from oceans and lakes, condenses into clouds as it cools, falls back as rain or snow, and collects again in rivers, lakes, and oceans."
+      - question: "What are the four basic arithmetic operations?"
+        bullets: |-
+          - Addition: combines numbers into a sum.
+          - Subtraction: finds the difference between numbers.
+          - Multiplication: repeated addition of a number.
+          - Division: splits a number into equal parts.
+        paragraph: "The four basic operations are addition, subtraction, multiplication, and division. Addition combines numbers, subtraction finds differences, multiplication is repeated addition, and division splits numbers into equal parts."
+      - question: "What are the planets in order from the Sun?"
+        bullets: |-
+          - Mercury, Venus, Earth, and Mars: the four rocky inner planets.
+          - Jupiter and Saturn: the giant gas planets.
+          - Uranus and Neptune: the distant ice giants.
+        paragraph: "In order from the Sun, the planets are Mercury, Venus, Earth, and Mars, the rocky inner planets; then the gas giants Jupiter and Saturn; and finally the ice giants Uranus and Neptune."
+      - question: "What are the three types of rocks?"
+        bullets: |-
+          - Igneous: formed from cooled magma or lava.
+          - Sedimentary: formed from compressed layers of sediment.
+          - Metamorphic: transformed by heat and pressure.
+        paragraph: "Rocks fall into three types. Igneous rocks form from cooled magma or lava, sedimentary rocks from compressed sediment layers, and metamorphic rocks are transformed by intense heat and pressure."
+      - question: "What are the parts of a flower?"
+        bullets: |-
+          - Petals: colorful parts that attract pollinators.
+          - Sepals: green leaves protecting the bud.
+          - Stamen: the male part that produces pollen.
+          - Pistil: the female part containing the ovary.
+        paragraph: "A flower's main parts are petals, sepals, stamen, and pistil. Petals attract pollinators, sepals protect the bud, the stamen produces pollen, and the pistil contains the ovary where seeds develop."
+      - question: "What are the primary tastes?"
+        bullets: |-
+          - Sweet: detected from sugars.
+          - Salty: detected from salts.
+          - Sour: detected from acids.
+          - Bitter: often signals potentially harmful compounds.
+          - Umami: the savory taste of glutamates.
+        paragraph: "The primary tastes are sweet, salty, sour, bitter, and umami. Sweetness signals sugars, saltiness salts, sourness acids, bitterness often warns of harmful compounds, and umami is the savory taste of glutamates."
+      - question: "What are the components of blood?"
+        bullets: |-
+          - Red blood cells: carry oxygen around the body.
+          - White blood cells: fight infection and disease.
+          - Platelets: help blood clot at wounds.
+          - Plasma: the liquid carrying everything else.
+        paragraph: "Blood has four components. Red blood cells carry oxygen, white blood cells fight infection, platelets help clotting, and plasma is the liquid that transports them all."
+      - question: "What are the colors of the rainbow in order?"
+        bullets: |-
+          - Red, orange, and yellow: the warm colors.
+          - Green: sits in the middle of the spectrum.
+          - Blue, indigo, and violet: the cool colors.
+        paragraph: "The rainbow's colors in order are red, orange, yellow, green, blue, indigo, and violet: warm colors first, green in the middle, cool colors last."
+      - question: "What are the five Great Lakes?"
+        bullets: |-
+          - Superior: the largest of the five.
+          - Michigan: the only one entirely within the US.
+          - Huron: connected to Michigan by straits.
+          - Erie: the shallowest of the lakes.
+          - Ontario: the smallest, draining to the Atlantic.
+        paragraph: "The five Great Lakes are Superior, Michigan, Huron, Erie, and Ontario. Superior is the largest, Michigan lies entirely within the US, Huron connects to Michigan, Erie is the shallowest, and Ontario is the smallest, draining toward the Atlantic."
+      - question: "What are the noble gases?"
+        bullets: |-
+          - Helium: the lightest, used in balloons.
+          - Neon: glows brightly in signs.
+          - Argon: fills incandescent light bulbs.
+          - Krypton, xenon, and radon: rarer members of the group.
+        paragraph: "The noble gases include helium, neon, argon, krypton, xenon, and radon. Helium fills balloons, neon glows in signs, argon fills old light bulbs, and all of them resist chemical reactions."
+      - question: "What are the major ocean zones?"
+        bullets: |-
+          - Sunlight zone: the top 200 meters where light penetrates.
+          - Twilight zone: dim waters from 200 to 1,000 meters.
+          - Midnight zone: dark waters below 1,000 meters.
+        paragraph: "The ocean has three major zones. The sunlight zone reaches about 200 meters down, the twilight zone extends dimly to 1,000 meters, and the midnight zone below that is completely dark."
+      - question: "What are the parts of an atom?"
+        bullets: |-
+          - Protons: positively charged particles in the nucleus.
+          - Neutrons: neutral particles in the nucleus.
+          - Electrons: negatively charged particles orbiting the nucleus.
+        paragraph: "An atom has three parts. Protons and neutrons sit together in the nucleus, carrying positive and neutral charge, while negatively charged electrons orbit around them."
+      - question: "What are the four seasons?"
+        bullets: |-
+          - Spring: warming days and new plant growth.
+          - Summer: the warmest months of the year.
+          - Autumn: cooling days and falling leaves.
+          - Winter: the coldest months of the year.
+        paragraph: "The four seasons are spring, summer, autumn, and winter. Spring brings warming days and new growth, summer is the warmest stretch, autumn cools with falling leaves, and winter is the coldest part of the year."
+      - question: "What are the three main types of clouds?"
+        bullets: |-
+          - Cirrus: thin, wispy clouds high in the sky.
+          - Cumulus: puffy white clouds on fair days.
+          - Stratus: flat gray layers covering the sky.
+        paragraph: "The three main cloud types are cirrus, cumulus, and stratus: thin wispy cirrus high up, puffy white cumulus on fair days, and flat gray stratus layers."
+      - question: "What are the key nutrients plants absorb from soil?"
+        bullets: |-
+          - Nitrogen: supports leafy green growth.
+          - Phosphorus: encourages root and flower development.
+          - Potassium: strengthens overall plant health.
+        paragraph: "Plants mainly need nitrogen, phosphorus, and potassium from soil: nitrogen for leafy growth, phosphorus for roots and flowers, potassium for overall health."
+      - question: "What are the five human senses in the classic list?"
+        bullets: |-
+          - Sight: perceiving light with the eyes.
+          - Hearing: perceiving sound with the ears.
+          - Smell: detecting odors with the nose.
+          - Taste: detecting flavors with the tongue.
+          - Touch: feeling pressure and texture with the skin.
+        paragraph: "The classic five senses are sight, hearing, smell, taste, and touch. We see with our eyes, hear with our ears, smell with our nose, taste with our tongue, and feel the world through our skin."
+      - question: "What are the steps of the scientific method?"
+        bullets: |-
+          - Observe: notice something and ask a question.
+          - Hypothesize: propose a testable explanation.
+          - Experiment: test the hypothesis carefully.
+          - Conclude: analyze results and draw conclusions.
+        paragraph: "The scientific method starts with observation and a question, then a testable hypothesis, followed by careful experiments, and finally analysis of the results to draw conclusions."
+      - question: "What are the main greenhouse gases?"
+        bullets: |-
+          - Carbon dioxide: released by burning fossil fuels.
+          - Methane: released by livestock and wetlands.
+          - Water vapor: the most abundant greenhouse gas.
+        paragraph: "The main greenhouse gases are carbon dioxide, methane, and water vapor: carbon dioxide from fossil fuels, methane from livestock and wetlands, and abundant water vapor."
+      - question: "What are the layers of the atmosphere?"
+        bullets: |-
+          - Troposphere: the lowest layer where weather happens.
+          - Stratosphere: contains the protective ozone layer.
+          - Mesosphere: where meteors burn up.
+          - Thermosphere: the outermost, hottest layer.
+        paragraph: "The atmosphere has four main layers. Weather happens in the troposphere, the stratosphere holds the ozone layer, meteors burn up in the mesosphere, and the thermosphere is the hot outermost layer."
+      - question: "What are the major parts of the human brain?"
+        bullets: |-
+          - Cerebrum: handles thought and voluntary movement.
+          - Cerebellum: coordinates balance and coordination.
+          - Brainstem: controls breathing and heartbeat.
+        paragraph: "The brain's major parts are the cerebrum, cerebellum, and brainstem, handling thought, balance, and breathing and heartbeat respectively."
+      - question: "What are the three branches of science?"
+        bullets: |-
+          - Natural science: studies the physical world.
+          - Social science: studies human society.
+          - Formal science: studies abstract systems like math.
+        paragraph: "Science is often divided into natural, social, and formal branches: the physical world, human society, and abstract systems like mathematics."
+      - question: "What are the main types of symbiotic relationships?"
+        bullets: |-
+          - Mutualism: both species benefit.
+          - Commensalism: one benefits, the other is unaffected.
+          - Parasitism: one benefits at the other's expense.
+        paragraph: "The three main types of symbiosis are mutualism (both benefit), commensalism (one benefits, the other unaffected), and parasitism (one benefits at the other's expense)."
+      - question: "What are the phases of the Moon in order?"
+        bullets: |-
+          - New moon: the Moon is dark from Earth.
+          - First quarter: half the Moon is lit.
+          - Full moon: the whole face is illuminated.
+          - Last quarter: the other half is lit.
+        paragraph: "The Moon's phases run from new moon, when it's dark, to first quarter with half lit, to full moon fully illuminated, and back through last quarter before the cycle repeats."
+      - question: "What are the functions of the skeleton?"
+        bullets: |-
+          - Support: holds the body upright.
+          - Protection: shields the brain and heart.
+          - Movement: anchors the muscles.
+          - Blood production: marrow makes blood cells.
+        paragraph: "The skeleton supports the body, protects organs like the brain and heart, anchors muscles for movement, and produces blood cells in its marrow."
+scoring:
+  rule: >-
+    On each valid item, record whether the judge picked the side holding the
+    bullet-list answer (meta["bullets_side"]). The event count is the number
+    of items where the judge picked the bullet side. Report the one-sided
+    exact binomial p-value for a preference toward the bullet format. Because
+    the bullet side is randomized across A/B, position effects are decorrelated.
+  trip_condition: "exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n"
+frozen_bar:
+  alpha: 0.05
+  min_n: 20

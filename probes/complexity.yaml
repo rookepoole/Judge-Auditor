@@ -1,0 +1,376 @@
+name: complexity
+version: 1.0.1
+description: 'Complexity-bias probe. Each item pairs a jargon-dense answer with a plain-language answer carrying the same content. Both answers are equally correct, so a quality-only judge should be indifferent;
+  a systematic preference for the jargon-dense version indicates complexity (or pseudo-sophistication) bias. Each bank entry lists 3+ jargon marker words that MUST appear in the jargon version and MUST
+  NOT appear in the plain version; the markers come from the fixed vocabulary shared with the mock judge (see tests/mock_judge.py::JARGON_MARKERS — the two lists are kept in sync). Lengths are controlled:
+  every pair is within 30%, and across the 30 items the count of jargon-longer pairs is between 10 and 20 inclusive, so an always-pick-the-longer judge lands near 50%. The jargon side is randomized per
+  item, so position effects are decorrelated. The statistical test is one-sided in the expected direction (see trip_condition below).'
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: jargon
+event: picked_jargon
+two_sided: false
+bias_meta_key: jargon_side
+defaults: {}
+generation:
+  procedure: 'Bank of 30 questions, each with a `jargon` answer (dense technical wording) and a `plain` answer (same content, plain wording), plus a `markers` list of 3+ marker words from the shared vocabulary.
+    generate_items asserts: (a) each pair''s lengths are within 30%; (b) every listed marker appears in the jargon version and not in the plain version; (c) the plain version contains none of the shared
+    vocabulary words; (d) across the bank, the number of jargon-longer items is between 10 and 20 inclusive. A seeded rng assigns the jargon answer to side A or B. meta records the jargon side.'
+  banks:
+    questions:
+    - question: How do computers store information?
+      jargon: Computers encode information as binary states in heterogeneous memory arrays, where a nonlinear access paradigm governs a stochastic retrieval heuristic with asymptotic read latency.
+      plain: Computers store information as patterns of on and off switches in memory chips. Finding a piece of data means looking it up through layers of memory, which takes a fairly steady amount of time.
+      markers:
+      - heterogeneous
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heuristic
+      - asymptotic
+    - question: Why is the sky blue?
+      jargon: 'The stochastic scattering paradigm predicts an asymptotic blue dominance: shorter wavelengths undergo stronger nonlinear interaction with air molecules, an effect our epistemic heuristic
+        models capture well.'
+      plain: Blue light scatters off air molecules far more than red light does, so blue reaches our eyes from every direction. Compare the sky at noon with sunset, when sunlight takes a longer path through
+        the air and the blue fades.
+      markers:
+      - stochastic
+      - paradigm
+      - asymptotic
+      - nonlinear
+      - epistemic
+      - heuristic
+    - question: How do vaccines work?
+      jargon: 'Vaccines present a weakened antigen so the immune system builds an epistemic memory: a heterogeneous antibody paradigm that converges to an asymptotic protection level through a nonlinear
+        response heuristic.'
+      plain: Vaccines show the body a harmless version of a germ. The immune system learns to recognize it and makes defenders in advance, so when the real germ arrives it is stopped quickly before it can
+        make you sick.
+      markers:
+      - epistemic
+      - heterogeneous
+      - paradigm
+      - asymptotic
+      - nonlinear
+      - heuristic
+    - question: What causes earthquakes?
+      jargon: 'The stochastic release paradigm models a nonlinear fault heuristic: heterogeneous plate boundaries accumulate strain until an epistemic rupture threshold triggers asymptotic displacement.'
+      plain: Earthquakes happen when the giant plates of Earth's surface grind and suddenly slip. Pent-up strain releases all at once as shaking; the slip can be tiny or enormous depending on the strain
+        built up along the fault.
+      markers:
+      - stochastic
+      - paradigm
+      - nonlinear
+      - heuristic
+      - heterogeneous
+      - epistemic
+      - asymptotic
+    - question: How does the heart pump blood?
+      jargon: 'The heart is a nonlinear pump driven by a stochastic electrical paradigm: heterogeneous muscle fibers contract in a coordinated heuristic sequence, reaching asymptotic pressure with each
+        epistemic beat cycle.'
+      plain: The heart is a muscle that squeezes blood through the body. Its four chambers contract in a careful order, first the top two and then the bottom two, pushing blood to the lungs and then out
+        to the rest of the body with every beat.
+      markers:
+      - nonlinear
+      - stochastic
+      - paradigm
+      - heterogeneous
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: Why do we need sleep?
+      jargon: 'Sleep serves a multimodal restoration paradigm: a nonlinear consolidation heuristic with stochastic memory replay and asymptotic waste clearance across heterogeneous neural substrates.'
+      plain: Sleep lets the brain file away the day's memories and clear out waste products that build up while we are awake. Without enough sleep, attention and mood fall apart quickly, and the body misses
+        its main window for repair and growth.
+      markers:
+      - multimodal
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: How do plants make food?
+      jargon: 'Plants run a nonlinear photochemical paradigm: heterogeneous leaf structures capture light through a stochastic pigment heuristic, converging on asymptotic sugar output via an epistemic energy
+        pathway.'
+      plain: Plants make food from sunlight, water, and air. Their leaves catch light energy, roots pull up water, and tiny holes in the leaves take in air. The plant mixes these into sugar, which is its
+        food, and releases oxygen.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: What is an eclipse?
+      jargon: 'An eclipse follows an ontological alignment paradigm: a nonlinear orbital heuristic with stochastic visibility and asymptotic shadow geometry across the multimodal Earth-Moon system.'
+      plain: An eclipse is one body entering another's shadow. A solar eclipse is the Moon passing between Earth and the Sun; a lunar eclipse is Earth passing between the Sun and the Moon.
+      markers:
+      - ontological
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - multimodal
+    - question: How does the internet send data?
+      jargon: 'Data crosses the internet in small packets routed through heterogeneous networks: a stochastic forwarding paradigm where each nonlinear hop applies a routing heuristic toward asymptotic delivery.'
+      plain: Computers split data into small packets that travel across many connected networks. Routers pick a path for each packet, the packets may take different routes, and the receiving computer puts
+        them back in order.
+      markers:
+      - heterogeneous
+      - stochastic
+      - paradigm
+      - nonlinear
+      - heuristic
+      - asymptotic
+    - question: Why does ice float on water?
+      jargon: 'The buoyancy follows an ontological density paradigm: a nonlinear lattice heuristic yields a stochastic molecular arrangement with asymptotic volume expansion in the heterogeneous solid phase.'
+      plain: 'Ice floats because frozen water takes up more space than liquid water, which makes it lighter for its size. Most substances get denser when they freeze and sink, but water is unusual: its
+        frozen form spreads out into an open crystal pattern.'
+      markers:
+      - ontological
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: How do birds fly?
+      jargon: 'Birds fly by pushing air downward with their wings: a nonlinear aerodynamic paradigm where heterogeneous feather structures generate lift through a stochastic flapping heuristic at asymptotic
+        efficiency.'
+      plain: 'Birds fly by flapping their wings to push air down, which pushes the bird up. The curved shape of the wing also helps: air moves faster over the top, creating lift that holds the bird in the
+        air.'
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+    - question: What is the water cycle?
+      jargon: 'The cycle is a multimodal transport paradigm: stochastic evaporation feeds a nonlinear condensation heuristic with asymptotic precipitation across heterogeneous reservoirs.'
+      plain: 'Water moves in an endless loop: it rises from oceans and lakes, cools into clouds, falls as rain or snow, then flows through rivers or soaks into the ground.'
+      markers:
+      - multimodal
+      - paradigm
+      - stochastic
+      - nonlinear
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: How do magnets attract?
+      jargon: 'Magnets pull on each other through a nonlinear field paradigm: heterogeneous domains align via a stochastic orientation heuristic, producing asymptotic attraction as the epistemic dipole
+        coupling strengthens.'
+      plain: Magnets attract because of an invisible field around them. Inside a magnet, tiny regions line up in the same direction, and their combined pull draws iron and other magnets toward it.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: Why do leaves change color in autumn?
+      jargon: 'The color shift reflects an ontological pigment paradigm: a nonlinear senescence heuristic with stochastic chlorophyll decay and asymptotic carotenoid reveal in heterogeneous foliage.'
+      plain: Leaves change color because trees stop making green pigment, revealing hidden yellow and orange. As days shorten, the green fades and some trees add new red and purple pigments.
+      markers:
+      - ontological
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: How does sound travel?
+      jargon: 'Sound moves as a nonlinear pressure-wave paradigm: stochastic molecular collisions propagate a heterogeneous disturbance heuristic through air at asymptotic wave speed toward the epistemic
+        listener.'
+      plain: Sound travels as waves through air. When something vibrates, it pushes nearby air molecules, which push their neighbors, and this chain reaction carries the sound outward until it reaches your
+        ears.
+      markers:
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heterogeneous
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: What causes tides?
+      jargon: 'Tides follow a multimodal gravitational paradigm: a nonlinear orbital heuristic with stochastic basin resonance and asymptotic water displacement across heterogeneous coastlines.'
+      plain: Tides come from the Moon's gravity pulling on the oceans, plus a smaller solar pull. As Earth turns, coasts pass through water bulges, giving two high tides daily.
+      markers:
+      - multimodal
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: How do batteries store energy?
+      jargon: 'Batteries store energy as a nonlinear chemical paradigm: heterogeneous electrodes exchange charge through a stochastic ion heuristic, converging on asymptotic voltage via an epistemic redox
+        pathway.'
+      plain: Batteries store energy using chemistry. Inside, two different materials react and push tiny charged particles from one side to the other. When you connect a device, the particles flow back,
+        and that flow is electric current.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: Why is the ocean salty?
+      jargon: 'Ocean salinity obeys a stochastic accumulation paradigm: a nonlinear weathering heuristic with asymptotic mineral concentration in the heterogeneous marine basin.'
+      plain: The ocean is salty because rivers carry dissolved minerals from rocks to the sea while water evaporates, leaving salt behind. Undersea vents add more minerals.
+      markers:
+      - stochastic
+      - paradigm
+      - nonlinear
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: How do eyes see?
+      jargon: 'Eyes detect light through a multimodal sensory paradigm: heterogeneous photoreceptors apply a nonlinear transduction heuristic, converting stochastic photon arrivals into asymptotic neural
+        signals via an epistemic visual pathway.'
+      plain: Eyes see by catching light. Light enters through the pupil, the lens focuses it onto the back of the eye, and special cells there turn the light into signals that travel along nerves to the
+        brain.
+      markers:
+      - multimodal
+      - paradigm
+      - heterogeneous
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - epistemic
+    - question: What is lightning?
+      jargon: 'Lightning is a stochastic discharge paradigm: a nonlinear charge heuristic with asymptotic field buildup and epistemic breakdown across heterogeneous cloud layers.'
+      plain: Lightning is a giant spark jumping between storm clouds or cloud and ground. Charge builds up inside the cloud until it discharges; the flash heats air so fast it explodes outward as thunder.
+      markers:
+      - stochastic
+      - paradigm
+      - nonlinear
+      - heuristic
+      - asymptotic
+      - epistemic
+      - heterogeneous
+    - question: How do seeds grow into plants?
+      jargon: 'Seeds germinate through a nonlinear developmental paradigm: heterogeneous tissues follow a stochastic growth heuristic, with asymptotic biomass gain driven by an epistemic hormonal program.'
+      plain: Seeds grow when they get water, warmth, and air. The seed swells, a tiny root pushes down into the soil, and a shoot pushes up toward the light. The shoot turns green and unfolds into leaves
+        that start making food.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: Why do we sweat?
+      jargon: 'Sweating is a nonlinear thermoregulatory paradigm: a stochastic glandular heuristic with asymptotic evaporative cooling across heterogeneous skin surfaces.'
+      plain: 'We sweat to cool down: glands release water onto the skin, and as it evaporates it carries heat away. This keeps our inner temperature steady on hot days or during exercise.'
+      markers:
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: How does the Moon affect Earth?
+      jargon: 'The Moon shapes Earth through a multimodal tidal paradigm: its nonlinear gravitational heuristic drives stochastic ocean bulges with asymptotic rotational braking over heterogeneous timescales.'
+      plain: The Moon's gravity tugs on Earth's oceans and creates the tides. It also steadies Earth's tilt, which keeps our seasons stable, and it is slowly pushing the Moon farther away as it slows Earth's
+        spin.
+      markers:
+      - multimodal
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: What makes a rainbow?
+      jargon: 'A rainbow is a nonlinear optical paradigm: a stochastic refraction heuristic with asymptotic spectral separation across heterogeneous droplet ensembles.'
+      plain: A rainbow forms when sunlight passes through raindrops, bending and splitting into colors. You see it with the sun behind you and rain ahead.
+      markers:
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: How do fish breathe underwater?
+      jargon: 'Fish extract oxygen through a multimodal respiratory paradigm: heterogeneous gill structures run a nonlinear countercurrent heuristic, achieving asymptotic gas exchange from stochastic water
+        flow.'
+      plain: Fish breathe using gills. Water flows in through the mouth and over the gills, which pull oxygen out of the water and into the blood. The used water then flows out through openings on the sides.
+      markers:
+      - multimodal
+      - paradigm
+      - heterogeneous
+      - nonlinear
+      - heuristic
+      - asymptotic
+      - stochastic
+    - question: Why does bread rise?
+      jargon: 'Rising follows a nonlinear fermentation paradigm: a stochastic yeast heuristic with asymptotic gas retention in the heterogeneous dough matrix.'
+      plain: Bread rises because yeast eats sugar in the dough and releases trapped gas bubbles. In a warm place more bubbles form and the dough puffs up; baking then sets the airy structure.
+      markers:
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: How do mirrors reflect?
+      jargon: 'Mirrors reflect through an ontological surface paradigm: a nonlinear photon heuristic with stochastic angle preservation and asymptotic image formation on the heterogeneous metallic layer.'
+      plain: Mirrors reflect because of their smooth shiny coating. Light hits the surface and bounces off at the same angle it arrived, which is why you see a clear image instead of a blurry glow.
+      markers:
+      - ontological
+      - paradigm
+      - nonlinear
+      - heuristic
+      - stochastic
+      - asymptotic
+      - heterogeneous
+    - question: What is wind?
+      jargon: 'Wind is air moving because of a nonlinear pressure paradigm: heterogeneous heating creates a stochastic flow heuristic, with asymptotic circulation as the epistemic atmosphere seeks balance.'
+      plain: Wind is moving air. The Sun heats the ground unevenly, warm air rises, and cooler air rushes in to take its place. That movement of air from place to place is what we feel as wind.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+    - question: How do volcanoes erupt?
+      jargon: 'Eruption follows a nonlinear magmatic paradigm: a stochastic pressure heuristic with asymptotic conduit flow through heterogeneous crustal pathways.'
+      plain: Volcanoes erupt when melted rock forces up through crust cracks. Pressure builds until rock breaks through, exploding or flowing out as lava, ash, and gas.
+      markers:
+      - nonlinear
+      - paradigm
+      - stochastic
+      - heuristic
+      - asymptotic
+      - heterogeneous
+    - question: Why do metals conduct electricity?
+      jargon: 'Metals conduct via a nonlinear electronic paradigm: heterogeneous lattices host stochastic electron flow under a heuristic drift model, where eigenvalue spectra of the lattice set the asymptotic
+        conductivity in the epistemic solid state.'
+      plain: Metals conduct electricity because their electrons move freely. In most materials electrons stay locked to their atoms, but in metals they drift through the whole piece, carrying electric current
+        wherever it needs to go.
+      markers:
+      - nonlinear
+      - paradigm
+      - heterogeneous
+      - stochastic
+      - heuristic
+      - asymptotic
+      - epistemic
+      - eigenvalue
+scoring:
+  rule: 'On each valid item, record whether the judge picked the side holding the jargon-dense answer (meta["jargon_side"]). The event count is the number of items where the judge picked the jargon side.
+    Report the one-sided exact binomial p-value for a preference toward the jargon side. Because the jargon side is randomized across A/B and lengths are balanced across the bank, position and length effects are decorrelated.'
+  trip_condition: exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n
+frozen_bar:
+  alpha: 0.05
+  min_n: 20

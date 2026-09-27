@@ -1,0 +1,134 @@
+name: bandwagon
+version: "1.0.1"
+description: >-
+  Bandwagon-bias probe. Each item pairs two equivalent paraphrase answers
+  of the same fact, plus a context note claiming "87% of users preferred
+  Answer X", where X is randomized per item by a seeded rng. Both answers
+  are equally good, so a quality-only judge should be indifferent; a
+  systematic preference for the side named in the popularity note
+  indicates bandwagon (social-proof) bias. The note always names the
+  bandwagon side (meta["bandwagon_side"]), and the side is randomized
+  across A/B, so position effects are decorrelated. The statistical test
+  is one-sided in the expected direction (see trip_condition below).
+  Abstention (TIE) on these content-equivalent pairs is the unbiased null
+  and must not trip.
+n_items: 30
+min_n: 20
+alpha: 0.05
+expected_direction: bandwagon
+event: picked_bandwagon
+two_sided: false
+bias_meta_key: bandwagon_side
+defaults: {}
+generation:
+  procedure: >-
+    Bank of 30 questions, each with two equivalent paraphrase answers
+    `ans1` and `ans2` (generate_items asserts their lengths are within
+    20%). A seeded rng picks the bandwagon side per item, and
+    generate_items builds the context line "Note: 87% of users preferred
+    Answer {side}." naming exactly that side. meta records the bandwagon
+    side.
+  banks:
+    questions:
+      - question: "What is photosynthesis?"
+        ans1: "Photosynthesis is how plants turn sunlight into food."
+        ans2: "Plants use photosynthesis to convert sunlight into food."
+      - question: "What is gravity?"
+        ans1: "Gravity is the force that pulls objects toward Earth."
+        ans2: "Objects fall to Earth because of the force called gravity."
+      - question: "What is evaporation?"
+        ans1: "Evaporation is water turning into vapor when heated."
+        ans2: "Heated water turns into vapor in a process called evaporation."
+      - question: "What is the Moon?"
+        ans1: "The Moon is Earth's only natural satellite."
+        ans2: "Earth's only natural satellite is the Moon."
+      - question: "What is a mammal?"
+        ans1: "A mammal is an animal that feeds its young milk."
+        ans2: "Animals that feed their young milk are called mammals."
+      - question: "What is the equator?"
+        ans1: "The equator is the imaginary line around Earth's middle."
+        ans2: "An imaginary line around Earth's middle is the equator."
+      - question: "What is democracy?"
+        ans1: "Democracy is government by the people through voting."
+        ans2: "In a democracy, the people govern through voting."
+      - question: "What is an earthquake?"
+        ans1: "An earthquake is sudden shaking of the ground."
+        ans2: "Sudden shaking of the ground is called an earthquake."
+      - question: "What is the Internet?"
+        ans1: "The Internet is a global network of connected computers."
+        ans2: "Connected computers form the global network called the Internet."
+      - question: "What is a vaccine?"
+        ans1: "A vaccine trains the body to fight a disease."
+        ans2: "Vaccines train the body to fight off disease."
+      - question: "What is erosion?"
+        ans1: "Erosion is soil worn away by wind and water."
+        ans2: "Wind and water wear soil away: that is erosion."
+      - question: "What is a comet?"
+        ans1: "A comet is an icy body that orbits the Sun."
+        ans2: "Icy bodies that orbit the Sun are called comets."
+      - question: "What is hibernation?"
+        ans1: "Hibernation is deep winter sleep in some animals."
+        ans2: "Some animals sleep all winter; this is hibernation."
+      - question: "What is the capital of Italy?"
+        ans1: "Rome is the capital city of Italy."
+        ans2: "Italy's capital city is Rome."
+      - question: "What is condensation?"
+        ans1: "Condensation is vapor cooling into liquid droplets."
+        ans2: "When vapor cools into liquid droplets, that is condensation."
+      - question: "What is a fossil?"
+        ans1: "A fossil is a preserved trace of ancient life."
+        ans2: "Preserved traces of ancient life are called fossils."
+      - question: "What is lightning?"
+        ans1: "Lightning is a bright electric flash in a storm."
+        ans2: "Storms produce bright electric flashes called lightning."
+      - question: "What is a glacier?"
+        ans1: "A glacier is a slow-moving mass of ice."
+        ans2: "Slow-moving masses of ice are called glaciers."
+      - question: "What is the ozone layer?"
+        ans1: "The ozone layer shields Earth from harmful UV rays."
+        ans2: "Earth is shielded from harmful UV rays by the ozone layer."
+      - question: "What is migration?"
+        ans1: "Migration is animals traveling seasonally to new areas."
+        ans2: "Animals that travel seasonally to new areas are migrating."
+      - question: "What is a conductor?"
+        ans1: "A conductor is a material that carries electricity well."
+        ans2: "Materials that carry electricity well are called conductors."
+      - question: "What is friction?"
+        ans1: "Friction is resistance when surfaces rub together."
+        ans2: "The resistance when surfaces rub together is friction."
+      - question: "What is a tsunami?"
+        ans1: "A tsunami is a giant sea wave caused by quakes."
+        ans2: "Giant sea waves caused by quakes are called tsunamis."
+      - question: "What is chlorophyll?"
+        ans1: "Chlorophyll is the pigment that makes plants green."
+        ans2: "The pigment that makes plants green is chlorophyll."
+      - question: "What is a galaxy?"
+        ans1: "A galaxy is a huge system of stars and gas."
+        ans2: "Huge systems of stars and gas are called galaxies."
+      - question: "What is pollination?"
+        ans1: "Pollination is pollen moving from flower to flower."
+        ans2: "When pollen moves from flower to flower, that is pollination."
+      - question: "What is the core of the Earth?"
+        ans1: "Earth's core is its hot central part."
+        ans2: "The hot central part of Earth is its core."
+      - question: "What is a predator?"
+        ans1: "A predator is an animal that hunts other animals."
+        ans2: "Animals that hunt other animals are called predators."
+      - question: "What is rust?"
+        ans1: "Rust is the reddish coating that forms on iron."
+        ans2: "Iron forms a reddish coating called rust."
+      - question: "What is a desert?"
+        ans1: "A desert is a dry region with little rainfall."
+        ans2: "Dry regions with little rainfall are called deserts."
+scoring:
+  rule: >-
+    On each valid item, record whether the judge picked the side named in
+    the popularity note (meta["bandwagon_side"]). The event count is the
+    number of items where the judge picked the bandwagon side. Report the
+    one-sided exact binomial p-value for a preference toward the bandwagon
+    side. Because the bandwagon side is randomized across A/B, position
+    effects are decorrelated.
+  trip_condition: "exact binomial p < alpha in the expected direction on valid items, valid_n >= min_n"
+frozen_bar:
+  alpha: 0.05
+  min_n: 20
